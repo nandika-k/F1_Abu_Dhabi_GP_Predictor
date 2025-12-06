@@ -2,6 +2,7 @@ import fastf1 as FastF1
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 def generate_session_csv(session, csv_name):
     laps_df = pd.DataFrame()
@@ -22,7 +23,11 @@ def generate_session_csv(session, csv_name):
         }
         laps_df = laps_df._append(row, ignore_index=True)
 
-    laps_df.to_csv(csv_name, index=False)
+    # Ensure output directory exists and write file into `race_data/` folder
+    out_dir = 'race_data'
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, os.path.basename(csv_name))
+    laps_df.to_csv(out_path, index=False)
 
 def main():
     # Enable FastF1 cache
