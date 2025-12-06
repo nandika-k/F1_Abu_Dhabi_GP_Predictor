@@ -133,6 +133,10 @@ abu_avg['Predicted Finish'] = pred_finish_abu
 abu_avg['Predicted Rank'] = abu_avg['Predicted Finish'].rank(method='dense', ascending=True).astype(int)
 abu_ranking = abu_avg.sort_values('Predicted Rank').reset_index(drop=True)
 
+# Filter to only include current drivers
+current_drivers = ['PIA', 'VER', 'HAM', 'LEC', 'SAI', 'RUS', 'NOR', 'ALO', 'GAS','HUL', 'TSU', 'STR', 'ALB']
+abu_ranking = abu_ranking[abu_ranking['Driver'].isin(current_drivers)]
+
 # Output results
 print("\nPredicted Abu Dhabi 2025 Results")
 print(abu_ranking[['Driver', 'Predicted Finish', 'Predicted Rank']])
