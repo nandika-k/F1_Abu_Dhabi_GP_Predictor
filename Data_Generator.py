@@ -19,7 +19,8 @@ def generate_session_csv(session, csv_name):
             'Sector 1 Average': np.mean(driver_laps_df['Sector1Time'].dt.total_seconds()),
             'Sector 2 Average': np.mean(driver_laps_df['Sector2Time'].dt.total_seconds()),
             'Sector 3 Average': np.mean(driver_laps_df['Sector3Time'].dt.total_seconds()),
-            'Positions': driver_laps_df['Position'].tolist()
+            'Positions': driver_laps_df['Position'].tolist(),
+            'Finish Position': driver_laps_df['Position'].iloc[-1]
         }
         laps_df = laps_df._append(row, ignore_index=True)
 
