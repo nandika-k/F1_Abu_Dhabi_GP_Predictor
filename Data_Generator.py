@@ -11,18 +11,22 @@ def generate_session_csv(session, csv_name):
         driver_laps = session.laps.pick_drivers(driver)
         driver_laps_df = pd.DataFrame(driver_laps)
 
-        row = {
-            'Driver': driver_laps_df['Driver'].iloc[0],
-            'Fastest Lap Time': min(driver_laps_df['LapTime'].dt.total_seconds()),
-            'Average Lap Time': np.mean(driver_laps_df['LapTime'].dt.total_seconds()),
-            'STD Lap Time': np.std(driver_laps_df['LapTime'].dt.total_seconds()),
-            'Sector 1 Average': np.mean(driver_laps_df['Sector1Time'].dt.total_seconds()),
-            'Sector 2 Average': np.mean(driver_laps_df['Sector2Time'].dt.total_seconds()),
-            'Sector 3 Average': np.mean(driver_laps_df['Sector3Time'].dt.total_seconds()),
-            'Positions': driver_laps_df['Position'].tolist(),
-            'Finish Position': driver_laps_df['Position'].iloc[-1]
-        }
-        laps_df = laps_df._append(row, ignore_index=True)
+        #drop if position is NaT
+        driver_laps_df = driver_laps_df.dropna(subset=['Position'])
+
+        if not driver_laps_df.empty:
+            row = {
+                'Driver': driver_laps_df['Driver'].iloc[0],
+                'Fastest Lap Time': min(driver_laps_df['LapTime'].dt.total_seconds()),
+                'Average Lap Time': np.mean(driver_laps_df['LapTime'].dt.total_seconds()),
+                'STD Lap Time': np.std(driver_laps_df['LapTime'].dt.total_seconds()),
+                'Sector 1 Average': np.mean(driver_laps_df['Sector1Time'].dt.total_seconds()),
+                'Sector 2 Average': np.mean(driver_laps_df['Sector2Time'].dt.total_seconds()),
+                'Sector 3 Average': np.mean(driver_laps_df['Sector3Time'].dt.total_seconds()),
+                'Positions': driver_laps_df['Position'].tolist(),
+                'Finish Position': driver_laps_df['Position'].iloc[-1]
+            }
+            laps_df = laps_df._append(row, ignore_index=True)
 
     # Ensure output directory exists and write file into `race_data/` folder
     out_dir = 'race_data'
